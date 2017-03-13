@@ -1,0 +1,44 @@
+PATH=$PATH:~/homebrew/sbin:~/homebrew/bin
+
+# Color to ls
+export CLICOLOR=1
+export LSCOLORS=gxBxhxDxfxhxhxhxhxcxcx
+
+# git info in prompt using: https://github.com/olivierverdier/zsh-git-prompt
+source ~/.gitprompt/zsh-git-prompt/zshrc.sh
+ZSH_THEME_GIT_PROMPT_CACHE=true
+if [ -n "$PS1" ]; then
+	PS1='%1~$(git_super_status) %# '
+fi
+
+setopt histignorealldups
+
+#autoload -Uz compinit && compinit
+
+toterm() {
+	tty <&1 >/dev/null
+}
+
+ls() {
+	if [  $# -eq 0 ] || { [ $# -eq 1 -a -d "$1" ] && [[ X"$1" != X-* ]] } && toterm; then
+		command ls -hb "$@"
+	else
+		command ls "$@"
+	fi
+}
+
+R() {
+	if [ $# -eq 0 ]; then
+		command R -q --no-save
+	else
+		command R "$@"
+	fi
+}
+
+py() {
+	if [ $# -eq 0 ]; then
+		command python -i -c ""
+	else
+		command python "$@"
+	fi
+}
